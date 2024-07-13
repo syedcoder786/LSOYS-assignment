@@ -22,14 +22,14 @@ const rentProduct = async (renterDetails:{id:string, days: number}, token: strin
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post<IProduct>(API_URL + '/rentProduct', renterDetails, config);
+  const response = await axios.post<IProduct>(API_URL + 'rentProduct', renterDetails, config);
 
   return response.data;
 };
 
 // Fetch Products
 const fetchProducts = async (): Promise<IProduct[]> => {
-  const response = await axios.post<IProduct[]>(API_URL + '/fetchProducts');
+  const response = await axios.post<IProduct[]>(API_URL + 'fetchProducts');
 
 
   return response.data;
@@ -37,7 +37,7 @@ const fetchProducts = async (): Promise<IProduct[]> => {
 
 // Fetch One Product
 const fetchOneProduct = async (dataId: string): Promise<IProduct> => {
-  const response = await axios.post<IProduct>(API_URL + '/fetchOneProduct', { dataId });
+  const response = await axios.post<IProduct>(API_URL + 'fetchOneProduct', { dataId });
 
 
   return response.data;
