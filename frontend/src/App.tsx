@@ -8,6 +8,7 @@ import NotFoundPage from "./screens/NotFoundPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProfilePage from "./screens/Profile";
+import Footer from "./components/Footer";
 
 function App() {
   const { setMode } = useThemeMode();
@@ -21,6 +22,7 @@ function App() {
       <div className="bg-gray-800 ">
         <Router>
           <Navbar />
+
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/addproduct" element={<AddProduct />} />
@@ -29,6 +31,7 @@ function App() {
             {/* 404 (Not Found) page */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
+          <Footer />
         </Router>
       </div>
     </Flowbite>
