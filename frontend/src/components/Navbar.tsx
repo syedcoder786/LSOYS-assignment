@@ -41,7 +41,9 @@ export default function Component() {
                 {user.email}
               </span>
             </Dropdown.Header>
-            <Dropdown.Item>Dashboard</Dropdown.Item>
+            <Link to="/profile">
+              <Dropdown.Item>My Profile</Dropdown.Item>
+            </Link>
             <Link to="/addproduct">
               <Dropdown.Item>Add Product</Dropdown.Item>
             </Link>

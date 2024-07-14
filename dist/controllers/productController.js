@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.rentProduct = exports.fetchOneProduct = exports.fetchProducts = exports.addProduct = void 0;
+exports.rentProduct = exports.fetchOneProduct = exports.fetchUserRentedProducts = exports.fetchProducts = exports.addProduct = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const productModel_1 = __importDefault(require("../models/productModel"));
 // Add Product
@@ -62,6 +62,28 @@ const fetchProducts = (0, express_async_handler_1.default)((req, res) => __await
     }
 }));
 exports.fetchProducts = fetchProducts;
+// Fetch User Rented Products
+const fetchUserRentedProducts = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const productItems = yield productModel_1.default.find({ "renterDetails.renter": (_a = req.user) === null || _a === void 0 ? void 0 : _a.id })
+            .sort('-updatedAt')
+            .populate("owner")
+            .populate("renterDetails.renter");
+        // console.log(productItems);
+        res.status(200).json(productItems);
+    }
+    catch (error) {
+        console.error(error);
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+}));
+exports.fetchUserRentedProducts = fetchUserRentedProducts;
 // Fetch One Product
 const fetchOneProduct = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

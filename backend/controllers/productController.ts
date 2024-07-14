@@ -54,6 +54,26 @@ const fetchProducts = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+// Fetch User Rented Products
+const fetchUserRentedProducts = asyncHandler(async (req: AuthRequest, res: Response) => {
+  try {
+    const productItems = await Product.find({ "renterDetails.renter": req.user?.id })
+    .sort('-updatedAt')
+    .populate("owner")
+    .populate("renterDetails.renter")
+
+    // console.log(productItems);
+    res.status(200).json(productItems);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof Error) {
+        res.status(400).json({ message: error.message });
+    } else {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
+});
+
 // Fetch One Product
 const fetchOneProduct = asyncHandler(async (req: Request, res: Response) => {
   try {
@@ -109,4 +129,4 @@ const rentProduct = asyncHandler(async (req: AuthRequest, res: Response) => {
   }
 });
 
-export { addProduct, fetchProducts, fetchOneProduct, rentProduct };
+export { addProduct, fetchProducts, fetchUserRentedProducts,fetchOneProduct, rentProduct };

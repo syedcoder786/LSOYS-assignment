@@ -10,5 +10,6 @@ const authMiddleware_js_1 = require("../middleware/authMiddleware.js");
 router.route("/").post(authMiddleware_js_1.protect, productController_1.addProduct);
 router.route("/rentProduct").post(authMiddleware_js_1.protect, productController_1.rentProduct);
 router.route("/fetchProducts").post(productController_1.fetchProducts);
+router.route("/fetchUserRentedProducts").post(authMiddleware_js_1.protect, productController_1.fetchUserRentedProducts);
 router.route("/fetchOneProduct").post(productController_1.fetchOneProduct);
 exports.default = router;

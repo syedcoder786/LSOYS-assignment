@@ -6,6 +6,7 @@ import axios from 'axios';
 
 interface ProductState {
   products: IProduct[] | null;
+  userRentedProdcuts: IProduct[] | null;
   product: IProduct | null;
   isError: boolean;
   isSuccess: boolean;
@@ -27,6 +28,11 @@ interface ProductState {
   isFetchProductLoading: boolean;
   isFetchProductMessage: string;
 
+  isFetchUserRentedProductError: boolean;
+  isFetchUserRentedProductSuccess: boolean;
+  isFetchUserRentedProductLoading: boolean;
+  isFetchUserRentedProductMessage: string;
+
   isFetchOneProductError: boolean;
   isFetchOneProductSuccess: boolean;
   isFetchOneProductLoading: boolean;
@@ -35,6 +41,7 @@ interface ProductState {
 
 const initialState: ProductState = {
   products: null,
+  userRentedProdcuts: null,
   product: null,
   isError: false,
   isSuccess: false,
@@ -55,6 +62,11 @@ const initialState: ProductState = {
   isFetchProductSuccess: false,
   isFetchProductLoading: false,
   isFetchProductMessage: '',
+
+  isFetchUserRentedProductError: false,
+  isFetchUserRentedProductSuccess: false,
+  isFetchUserRentedProductLoading: false,
+  isFetchUserRentedProductMessage: '',
 
   isFetchOneProductError: false,
   isFetchOneProductSuccess: false,
@@ -112,6 +124,25 @@ export const fetchProducts = createAsyncThunk<IProduct[], void, { state: RootSta
   async (_, thunkAPI) => {
     try {
       return await productService.fetchProducts();
+    } catch (error) {
+      let message;
+      if (axios.isAxiosError(error)) {
+        message = error.response?.data?.message || error.message || error.toString();
+      } else {
+        message = (error as Error).message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Fetch products
+export const fetchUserRentedProducts = createAsyncThunk<IProduct[], void, { state: RootState }>(
+  'product/fetchUserRented',
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      return await productService.fetchUserRentedProducts(token || "");
     } catch (error) {
       let message;
       if (axios.isAxiosError(error)) {
@@ -226,6 +257,23 @@ export const productSlice = createSlice({
             state.isFetchProductMessage = action.payload;
         }
       })
+
+      .addCase(fetchUserRentedProducts.pending, (state) => {
+        state.isFetchUserRentedProductLoading = true;
+      })
+      .addCase(fetchUserRentedProducts.fulfilled, (state, action: PayloadAction<IProduct[]>) => {
+        state.isFetchUserRentedProductLoading = false;
+        state.isFetchUserRentedProductSuccess = true;
+        state.userRentedProdcuts = action.payload;
+      })
+      .addCase(fetchUserRentedProducts.rejected, (state, action) => {
+        state.isFetchUserRentedProductLoading = false;
+        state.isFetchUserRentedProductError = true;
+        if (typeof action.payload === 'string') {
+            state.isFetchUserRentedProductMessage = action.payload;
+        }
+      })
+
       .addCase(fetchOneProduct.pending, (state) => {
         state.isFetchOneProductLoading = true;
       })

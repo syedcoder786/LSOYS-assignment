@@ -151,7 +151,10 @@ const ProductList: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    setDays(0);
+    setIsOpen(false);
+  };
 
   return (
     <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
@@ -310,7 +313,7 @@ const ProductList: React.FC = () => {
                   className="mr-2"
                 />
               )}
-              Rent
+              Rent {days ? `for ₹${(oneProduct?.price ?? 0) * days}` : ""}
             </button>
           </div>
         </Drawer.Items>

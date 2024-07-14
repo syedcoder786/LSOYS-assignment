@@ -27,6 +27,18 @@ const rentProduct = async (renterDetails:{id:string, days: number}, token: strin
   return response.data;
 };
 
+// Fetch User Rented Products
+const fetchUserRentedProducts = async (token: string): Promise<IProduct[]> => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.post(API_URL + 'fetchUserRentedProducts',{}, config);
+
+  return response.data;
+};
+
 // Fetch Products
 const fetchProducts = async (): Promise<IProduct[]> => {
   const response = await axios.post<IProduct[]>(API_URL + 'fetchProducts');
@@ -47,6 +59,7 @@ const productService = {
   addProduct,
   rentProduct,
   fetchProducts,
+  fetchUserRentedProducts,
   fetchOneProduct,
 };
 

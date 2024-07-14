@@ -7,6 +7,7 @@ import AddProduct from "./screens/AddProduct";
 import NotFoundPage from "./screens/NotFoundPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProfilePage from "./screens/Profile";
 
 function App() {
   const { setMode } = useThemeMode();
@@ -23,7 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/addproduct" element={<AddProduct />} />
-            {/* <Route path="/contact" element={<ContactUs />} /> */}
+            <Route path="/profile" element={<ProfilePage />} />
 
             {/* 404 (Not Found) page */}
             <Route path="*" element={<NotFoundPage />} />
